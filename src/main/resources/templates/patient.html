@@ -11,6 +11,21 @@
     <div class="card">
         <div class="card-header"> Liste Patients </div>
         <div class="card-body">
+            <form method="get" th:href="@{index}">
+                <ul class="nav nav-pills">
+                    <li>
+                        <label class="form-label">Keyword:</label>
+                    </li>
+                    <li>
+                        <input type="text" class="form-control" name="keyword" th:value="${keyword}">
+                    </li>
+                    <li>
+                        <button class="btn btn-info">
+                            <i class="bi bi-search">Chercher</i>
+                        </button>
+                    </li>
+                </ul>
+            </form>
             <table class="table">
                 <thead>
                 <tr>
