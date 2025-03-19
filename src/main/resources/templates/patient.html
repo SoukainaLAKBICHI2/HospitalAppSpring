@@ -51,6 +51,12 @@
                             <i class="bi bi-trash">Delete</i>
                         </a>
                     </td>
+                    <td>
+                        <a  class="btn btn-success"
+                            th:href="@{editPatient(id=${p.id})}">
+                            <i class="bi bi-pencil">Edit</i>
+                        </a>
+                    </td>
 
                 </tr>
                 </thead>
@@ -66,7 +72,6 @@
             </ul>
         </div>
     </div>
-</div>
-<div>
+
 </body>
 </html>

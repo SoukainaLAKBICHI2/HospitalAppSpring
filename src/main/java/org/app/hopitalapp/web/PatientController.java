@@ -48,10 +48,16 @@ public class PatientController {
     @PostMapping("/savePatient")
     public String savePatient(@Valid Patient patient, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "formPatients";
+            return "formPatient";
         }
         patientRepository.save(patient);
         return "redirect:/index?keyword="+patient.getNom();
+    }
+    @GetMapping("/editPatient")
+    public String editPatient(@RequestParam(name = "id") Long id, Model model){
+        Patient patient=patientRepository.findById(id).get();
+        model.addAttribute("patient",patient);
+        return "editPatient";
     }
 
 
