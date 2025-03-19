@@ -1,5 +1,6 @@
 package org.app.hopitalapp.web;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.app.hopitalapp.entities.Patient;
 import org.app.hopitalapp.repository.PatientRepository;
@@ -7,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -41,6 +44,14 @@ public class PatientController {
     public String formPatient(Model model ){
         model.addAttribute("patient",new Patient());
         return "formPatient";
+    }
+    @PostMapping("/savePatient")
+    public String savePatient(@Valid Patient patient, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "formPatients";
+        }
+        patientRepository.save(patient);
+        return "redirect:/index?keyword="+patient.getNom();
     }
 
 
