@@ -1,5 +1,6 @@
 package org.app.hopitalapp.security;
 
+import org.app.hopitalapp.security.entities.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,9 @@ import javax.sql.DataSource;
 @EnableMethodSecurity(prePostEnabled = true)
 public class securityConfig {
 
-    @Bean
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    //@Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
         return new JdbcUserDetailsManager(dataSource);
     }
@@ -50,6 +53,7 @@ public class securityConfig {
                 )
                 .formLogin(form -> form
                         .defaultSuccessUrl("/user/index", true)
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll())
@@ -57,6 +61,7 @@ public class securityConfig {
 
         http.csrf(csrf -> csrf.disable());
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+        http.userDetailsService(userDetailsService);
 
         return http.build();
     }
