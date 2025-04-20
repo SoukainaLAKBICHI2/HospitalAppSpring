@@ -11,7 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -19,19 +22,21 @@ import org.springframework.security.web.SecurityFilterChain;
 public class securityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
     }
 
+    //private PasswordEncoder encoder;
 
-    @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager(PasswordEncoder encoder) {
-        UserDetails user1 = User.withUsername("user1").password(encoder.encode("1234")).roles("USER").build();
-        UserDetails user2 = User.withUsername("user2").password(encoder.encode("1234")).roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password(encoder.encode("1234")).roles("USER", "ADMIN").build();
 
-        return new InMemoryUserDetailsManager(user1, user2, admin);
-    }
+    //@Bean
+    //public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+       // UserDetails user1 = User.withUsername("user1").password(encoder.encode("1234")).roles("USER").build();
+       // UserDetails user2 = User.withUsername("user2").password(encoder.encode("1234")).roles("USER").build();
+        //UserDetails admin = User.withUsername("admin").password(encoder.encode("1234")).roles("USER", "ADMIN").build();
+
+        //return new InMemoryUserDetailsManager(user1, user2, admin);
+    //}
 
 
     @Bean
@@ -46,10 +51,6 @@ public class securityConfig {
                 .formLogin(form -> form
                         .defaultSuccessUrl("/user/index", true)
                         .permitAll()
-                )
-                .rememberMe(remember -> remember
-                        .key("uniqueAndSecret") // tu peux mettre une clé secrète ici
-                        .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 jours de validité
                 )
                 .logout(logout -> logout.permitAll())
                 .exceptionHandling(exception -> exception.accessDeniedPage("/notAuthorized"));
